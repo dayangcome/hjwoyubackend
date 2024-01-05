@@ -30,7 +30,7 @@ public class GPTController {
     //获取回答
     @GetMapping("/answer")
     public R getanswer(String question) throws NoApiKeyException, InputRequiredException {
-        Constants.apiKey="你的APIkey";
+        Constants.apiKey="sk-b8876154e7e74210bbdace3e65bd4cfa";
         GenerationResult result=callWithMessage(question);
         return R.success(result.getOutput().getChoices().get(0).getMessage().getContent());
     }
