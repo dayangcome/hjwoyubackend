@@ -3,15 +3,15 @@ package com.example.hjwoyu.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author 大洋
@@ -55,7 +55,7 @@ public class Dyuser implements Serializable {
     /**
      * 手机号
      */
-    private String Address;
+    private String address;
 
     /**
      * 昵称
