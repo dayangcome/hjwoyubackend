@@ -67,7 +67,8 @@ public class DynamicController {
         queryWrapper.eq(Uandi::getAttitude, 1);
         List<Uandi> uandisList = uandiService.list(queryWrapper);
         List<Long> likeList = new ArrayList<>();
-        for (Uandi u : uandisList) {                        //过滤，找出type和目标相等的动态
+        //过滤，找出type和目标相等的动态
+        for (Uandi u : uandisList) {
             Dynamic dynamic = dynamicService.getById(u.getIid());
             if (dynamic != null && dynamic.getCategory().equals(type)) {
                 likeList.add(u.getIid());
@@ -83,7 +84,8 @@ public class DynamicController {
         queryWrapper.eq(Uandi::getAttitude, 2);
         List<Uandi> uandisList = uandiService.list(queryWrapper);
         List<Long> dislikeList = new ArrayList<>();
-        for (Uandi u : uandisList) {                        //过滤，找出type和目标相等的动态
+        //过滤，找出type和目标相等的动态
+        for (Uandi u : uandisList) {
             Dynamic dynamic = dynamicService.getById(u.getIid());
             if (dynamic != null && dynamic.getCategory().equals(type)) {
                 dislikeList.add(u.getIid());
@@ -98,8 +100,8 @@ public class DynamicController {
     public R changedy(@PathVariable("code") Integer code, @PathVariable("uid") Long uid, @PathVariable("iid") Long iid) {
 
         // 定义常量
-        final Integer LIKE_CODE = 1;
-        final Integer DISLIKE_CODE = 2;
+        final Integer lIKECODE = 1;
+        final Integer dISLIKECODE = 2;
 
         LambdaQueryWrapper<Uandi> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Uandi::getIid, iid);
@@ -112,14 +114,14 @@ public class DynamicController {
             uandi1.setUid(uid);
             uandiService.save(uandi1);
             //如果是点赞，则动态点赞数+1，热度值+3
-            if (LIKE_CODE.equals(code)) {
+            if (lIKECODE.equals(code)) {
                 Dynamic dynamic = dynamicService.getById(iid);
                 dynamic.setLikeCounts(dynamic.getLikeCounts() + 1);
                 dynamic.setHots(dynamic.getHots() + 3);
                 dynamicService.updateById(dynamic);
             }
             //如果是点踩，则动态点踩数+1，热度值-2
-            if (DISLIKE_CODE.equals(code)) {
+            if (dISLIKECODE.equals(code)) {
                 Dynamic dynamic = dynamicService.getById(iid);
                 dynamic.setDislikeCounts(dynamic.getDislikeCounts() + 1);
                 dynamic.setHots(dynamic.getHots() - 2);
@@ -127,7 +129,7 @@ public class DynamicController {
             }
         } else {
             //点赞改为点踩，点踩数+1，点赞数-1，热度-5
-            if (LIKE_CODE.equals(uandi.getAttitude())) {
+            if (lIKECODE.equals(uandi.getAttitude())) {
                 Dynamic dynamic = dynamicService.getById(iid);
                 dynamic.setLikeCounts(dynamic.getLikeCounts() - 1);
                 dynamic.setDislikeCounts(dynamic.getDislikeCounts() + 1);
@@ -135,7 +137,7 @@ public class DynamicController {
                 dynamicService.updateById(dynamic);
             }
             //点踩改为点赞，点赞数+1，点踩数-1，热度+5
-            if (DISLIKE_CODE.equals(uandi.getAttitude())) {
+            if (dISLIKECODE.equals(uandi.getAttitude())) {
                 Dynamic dynamic = dynamicService.getById(iid);
                 dynamic.setDislikeCounts(dynamic.getDislikeCounts() - 1);
                 dynamic.setLikeCounts(dynamic.getLikeCounts() + 1);

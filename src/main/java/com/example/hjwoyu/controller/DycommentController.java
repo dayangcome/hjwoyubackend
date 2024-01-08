@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author 大洋
@@ -33,25 +33,25 @@ public class DycommentController {
     private IDynamicService dynamicService;
 
     @GetMapping("/getcomments")
-    public R listcomments(Long iid){         //按照父动态查询评论
-        LambdaQueryWrapper<Dycomment> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(Dycomment::getParentId,iid);
-        List<Dycomment> dycommentList=dycommentService.list(queryWrapper);
-        if(dycommentList==null){
+    public R listcomments(Long iid) {         //按照父动态查询评论
+        LambdaQueryWrapper<Dycomment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dycomment::getParentId, iid);
+        List<Dycomment> dycommentList = dycommentService.list(queryWrapper);
+        if (dycommentList == null) {
             return R.success(new ArrayList<Dycomment>());
         }
         return R.success(dycommentList);
     }
 
     @PostMapping("/addcomments")
-    public R addcomments(@RequestBody Dycomment mycomment){         //发表评论
+    public R addcomments(@RequestBody Dycomment mycomment) {         //发表评论
         mycomment.setCreateDate(LocalDateTime.now());
         dycommentService.save(mycomment);
 
         //发表评论，原讨论评论数+1，热度+2
-        Dynamic dynamic=dynamicService.getById(mycomment.getParentId());
-        dynamic.setCommentCounts(dynamic.getCommentCounts()+1);
-        dynamic.setHots(dynamic.getHots()+2);
+        Dynamic dynamic = dynamicService.getById(mycomment.getParentId());
+        dynamic.setCommentCounts(dynamic.getCommentCounts() + 1);
+        dynamic.setHots(dynamic.getHots() + 2);
         dynamicService.updateById(dynamic);
 
         return R.success("添加成功");
@@ -59,18 +59,18 @@ public class DycommentController {
 
 
     @GetMapping("/delcomment")
-    public R delcomment(Integer commentid){         //删除评论
-        try{
+    public R delcomment(Integer commentid) {         //删除评论
+        try {
             //删除评论，原讨论评论数-1，热度-2
-            Dycomment mycomment=dycommentService.getById(commentid);
-            Dynamic dynamic=dynamicService.getById(mycomment.getParentId());
-            dynamic.setCommentCounts(dynamic.getCommentCounts()-1);
-            dynamic.setHots(dynamic.getHots()-2);
+            Dycomment mycomment = dycommentService.getById(commentid);
+            Dynamic dynamic = dynamicService.getById(mycomment.getParentId());
+            dynamic.setCommentCounts(dynamic.getCommentCounts() - 1);
+            dynamic.setHots(dynamic.getHots() - 2);
             dynamicService.updateById(dynamic);
+            //从数据库中删掉该评论
+            dycommentService.removeById(commentid);
 
-            dycommentService.removeById(commentid); //从数据库中删掉该评论
-
-        }catch (Exception e){
+        } catch (Exception e) {
             return R.fail("删除失败");
         }
         return R.success("删除成功");

@@ -4,7 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//通用结果类
+/**
+ * <p>
+ * 通用结果类
+ * </p>
+ *
+ * @author 大洋
+ * @since 2023-11-28
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,9 +26,10 @@ public class R {
 
 
     public static R success(Object data) {
-        return new R(true,200,"success",data);
+        return new R(true, 200, "success", data);
     }
+
     public static R fail(String msg) {
-        return new R(false,100,msg,null);
+        return new R(false, 100, msg, null);
     }
 }
